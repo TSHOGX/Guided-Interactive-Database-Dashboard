@@ -1,12 +1,22 @@
 "use client";
 
-import FilesBox from "@/components/FilesBox";
-import QueryBox from "@/components/QueryBox";
+// import FilesBox from "@/components/FilesBox";
+import Loading from "@/components/Loading";
+// import QueryBox from "@/components/QueryBox";
 import QueryRstBox from "@/components/QueryRstBox";
 import VisBox from "@/components/VisBox";
-import { useState } from "react";
+import dynamic from "next/dynamic";
+import { Suspense, useState } from "react";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+
+const FilesBox = dynamic(() => import("@/components/FilesBox"), {
+  ssr: false,
+});
+
+const QueryBox = dynamic(() => import("@/components/QueryBox"), {
+  ssr: false,
+});
 
 interface QueryResult {
   [key: string]: any;
@@ -25,10 +35,14 @@ export default function DuckDB() {
       </div>
       <div className=" grid min-h-[80svh] grid-cols-4 gap-8">
         <div className=" ">
-          <FilesBox />
+          <Suspense fallback={<Loading />}>
+            <FilesBox />
+          </Suspense>
         </div>
         <div className=" col-span-3 flex flex-col gap-8">
-          <QueryBox setQueryRst={setQueryRst} />
+          <Suspense fallback={<Loading />}>
+            <QueryBox setQueryRst={setQueryRst} />
+          </Suspense>
           <QueryRstBox queryRst={queryRst as QueryResult[]} />
           <VisBox />
         </div>
