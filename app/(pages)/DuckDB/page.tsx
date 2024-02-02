@@ -5,6 +5,7 @@ import Loading from "@/components/Loading";
 // import QueryBox from "@/components/QueryBox";
 import QueryRstBox from "@/components/QueryRstBox";
 import VisBox from "@/components/VisBox";
+import { QueryResult } from "@/lib/types";
 import dynamic from "next/dynamic";
 import { Suspense, useState } from "react";
 import { ToastContainer } from "react-toastify";
@@ -17,10 +18,6 @@ const FilesBox = dynamic(() => import("@/components/FilesBox"), {
 const QueryBox = dynamic(() => import("@/components/QueryBox"), {
   ssr: false,
 });
-
-interface QueryResult {
-  [key: string]: any;
-}
 
 export default function DuckDB() {
   const [queryRst, setQueryRst] = useState<QueryResult[]>([

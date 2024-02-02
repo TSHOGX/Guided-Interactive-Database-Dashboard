@@ -10,8 +10,13 @@
   },
   "dependencies": {
     "@duckdb/duckdb-wasm": "^1.28.1-dev106.0",
+    "@finos/perspective": "^2.7.1",
+    "@finos/perspective-viewer": "^2.7.1",
+    "@finos/perspective-viewer-d3fc": "^2.7.1",
+    "@finos/perspective-viewer-datagrid": "^2.7.1",
     "@langchain/community": "^0.0.24",
     "@types/react-syntax-highlighter": "^15.5.11",
+    "ag-grid-react": "^31.0.3",
     "ai": "^2.2.33",
     "apache-arrow": "^15.0.0",
     "langchain": "^0.1.11",

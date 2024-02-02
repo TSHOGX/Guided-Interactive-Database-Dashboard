@@ -16,6 +16,7 @@ export default function QueryBox({
       const inputQuery = formData.get("inputQuery");
       const results = await conn.query(inputQuery);
       // console.log(results.toString());
+      // console.log(results.toArray());
       setQueryRst(results.toArray());
     } catch (e) {
       let msg = e instanceof Error ? e.message : String(e);
