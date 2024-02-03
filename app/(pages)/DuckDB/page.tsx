@@ -27,9 +27,9 @@ export default function DuckDB() {
   return (
     <Suspense fallback={<Loading />}>
       <div className=" min-h-screen bg-white text-black dark:bg-black dark:text-white">
-        <div className=" container mx-auto">
+        <div className=" container mx-auto pb-[10vh] pt-[5vh]">
           <ToastContainer className=" absolute right-4 top-4" />
-          <div className=" flex min-h-[10svh] flex-col items-center justify-between py-[5svh]">
+          <div className=" flex min-h-[10svh] flex-col items-center justify-between">
             <div className=" text-2xl">
               Guided Interactive Database Dashboard
             </div>
@@ -41,7 +41,7 @@ export default function DuckDB() {
             <div className=" col-span-3 flex flex-col gap-8">
               <QueryBox setQueryRst={setQueryRst} />
               <QueryRstBox queryRst={queryRst as QueryResult[]} />
-              <VisBox />
+              <VisBox queryRst={queryRst as QueryResult[]} />
             </div>
           </div>
         </div>
