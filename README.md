@@ -1,18 +1,18 @@
 # Guided Interactive Database Dashboard
 
+Frontend : React + Vite
+- Visualization: `finos/perspective`
+- SQL Editor: `react-ace`
 
-## Logs
-
-- 2024-01-29 simple interface; load file in FilesBox
-- 2024-01-30 connect with duckdb; query & display the results
-- 2024-01-31 simple dark theme; result formatting; permanent FilesBox list; hosted
-- 2024-02-01 LLM ChatBox; render messages in Markdown format
-- 2024-02-02 AgGrid (fast render query results); simple Apache Echarts
-- 2024-02-04 Tring Chroma: JUST not working in NextJS 14 [link](https://github.com/jeffchuber/nextjs-chroma)
+Backend : Django + DuckDB
 
 
-## TODO
 
-- sql editor? select, send, run
-- drag border to resize
-- wait for all components loaded
+```bash
+media
+/ files     # for uploaded files, related to sqlite database
+/ tables    # for saved tables
+/ temp      # for temp query result
+```
+
+
