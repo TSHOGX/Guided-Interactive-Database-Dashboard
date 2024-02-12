@@ -17,29 +17,33 @@ export function ChatBox(props: {
   endpoint: string;
   placeholder?: string;
   showIngestForm?: boolean;
-  showIntermediateStepsToggle?: boolean;
 }) {
   const messageContainerRef = useRef<HTMLDivElement | null>(null);
 
-  const { endpoint, placeholder, showIngestForm, showIntermediateStepsToggle } =
-    props;
+  const { endpoint, placeholder, showIngestForm } = props;
 
-  const [showIntermediateSteps, setShowIntermediateSteps] = useState(false);
+  // const [showIntermediateSteps, setShowIntermediateSteps] = useState(false);
+  // if (endpoint === "api/chat/agents") {
+  //   const showIntermediateSteps = true;
+  // } else {
+  //   const showIntermediateSteps = false;
+  // }
+
   const [intermediateStepsLoading, setIntermediateStepsLoading] =
     useState(false);
 
-  const intemediateStepsToggle = showIntermediateStepsToggle && (
-    <div>
-      <input
-        type="checkbox"
-        id="show_intermediate_steps"
-        name="show_intermediate_steps"
-        checked={showIntermediateSteps}
-        onChange={(e) => setShowIntermediateSteps(e.target.checked)}
-      ></input>
-      <label htmlFor="show_intermediate_steps"> Show intermediate steps</label>
-    </div>
-  );
+  // const intemediateStepsToggle = showIntermediateStepsToggle && (
+  //   <div>
+  //     <input
+  //       type="checkbox"
+  //       id="show_intermediate_steps"
+  //       name="show_intermediate_steps"
+  //       checked={showIntermediateSteps}
+  //       onChange={(e) => setShowIntermediateSteps(e.target.checked)}
+  //     ></input>
+  //     <label htmlFor="show_intermediate_steps"> Show intermediate steps</label>
+  //   </div>
+  // );
 
   const [sourcesForMessages, setSourcesForMessages] = useState<
     Record<string, any>
@@ -83,9 +87,9 @@ export function ChatBox(props: {
       // TODO break current process
       return;
     }
-    if (!showIntermediateSteps) {
+    if (endpoint !== "api/chat/agents") {
+      console.log("don't need to show Intermediate Steps");
       handleSubmit(e);
-      // Some extra work to show intermediate steps properly
     } else {
       setIntermediateStepsLoading(true);
       setInput("");
@@ -168,7 +172,7 @@ export function ChatBox(props: {
       </div>
 
       <form onSubmit={sendMessage} className="flex w-full flex-col">
-        <div className="flex">{intemediateStepsToggle}</div>
+        {/* <div className="flex">{intemediateStepsToggle}</div> */}
         <div className="mt-4 flex w-full">
           <input
             className="mr-8 grow rounded border border-gray-300 p-4 text-gray-400"

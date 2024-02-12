@@ -8,6 +8,7 @@
 - 2024-01-31 simple dark theme; result formatting; permanent FilesBox list; hosted
 - 2024-02-01 LLM ChatBox; render messages in Markdown format
 - 2024-02-02 AgGrid (fast render query results); simple Apache Echarts
+- 2024-02-04 Tring Chroma: JUST not working in NextJS 14 [link](https://github.com/jeffchuber/nextjs-chroma)
 
 
 ## TODO

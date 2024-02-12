@@ -15,6 +15,7 @@
     "ag-grid-react": "^31.0.3",
     "ai": "^2.2.33",
     "apache-arrow": "^15.0.0",
+    "chromadb": "^1.8.1",
     "echarts": "^5.4.3",
     "echarts-for-react": "^3.0.2",
     "langchain": "^0.1.11",
