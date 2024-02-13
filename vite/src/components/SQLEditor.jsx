@@ -1,4 +1,4 @@
-import React, { Dispatch, SetStateAction, useRef, useState } from "react";
+import React, { useRef } from "react";
 import AceEditor from "react-ace";
 
 import "ace-builds/src-noconflict/mode-mysql";
@@ -6,7 +6,6 @@ import "ace-builds/src-noconflict/ext-language_tools";
 import "./sql_theme.css";
 
 export default function SQLEditor({ setSelectedCode }) {
-  // const [selectedCode, setSelectedCode] = useState("");
   const aceEditorRef = useRef();
 
   const executeSelectedCode = () => {
@@ -72,7 +71,7 @@ DESCRIBE my_table;
 SHOW TABLES;
 
 -- Local File Read
-SELECT * FROM read_csv('media/files/ohbrfss12.csv', AUTO_DETECT=TRUE);
+SELECT * FROM read_csv_auto('media/files/uploaded.csv');
 
 -- Remote Parquet scans:
 SELECT * FROM 'https://shell.duckdb.org/data/tpch/0_01/parquet/orders.parquet' LIMIT 1000;
@@ -94,6 +93,7 @@ SELECT * FROM read_csv_auto('https://raw.githubusercontent.com/tobilg/public-clo
 
 -- Settings
 SELECT * FROM duckdb_settings();
+
 
 
 

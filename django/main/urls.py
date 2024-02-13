@@ -23,20 +23,16 @@ from django.conf.urls.static import static
 from rest_framework import routers
 
 from fileManager.views import FileViewSet
-from fileManager.views import delete_file
-
-# from fileManager.views import get_table_list
-from duckduck.views import simple_query
-from duckduck.views import get_table_list
+from duckduck.views import TableViewSet, excute_query, get_table_list
 
 router = routers.DefaultRouter()
-router.register("files-router", FileViewSet, basename="file-router")
+router.register("file-router", FileViewSet, basename="file-router")
+router.register("table-router", TableViewSet, basename="table-router")
 
 urlpatterns = [
     path("admin/", admin.site.urls),
-    path("file-manager/", include(router.urls)),
-    path("file-manager/delete-file/<int:pk>/", delete_file),
-    path("duckduck/simple_query/", simple_query),
+    path("api/", include(router.urls)),
+    path("duckduck/execute-query/", excute_query),
     path("duckduck/get-table-list/", get_table_list),
 ]
 

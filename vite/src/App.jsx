@@ -2,6 +2,13 @@ import { useEffect, useState } from "react";
 import Perspective from "./components/Perspective";
 import SQLEditor from "./components/SQLEditor";
 import DropFile from "./components/DropFile";
+import {
+  excuteQuery,
+  updateTableList,
+  updateFileList,
+  deleteFile,
+  postNewFile,
+} from "./lib/api";
 
 import { Panel, PanelGroup } from "react-resizable-panels";
 import ResizeHandle from "./components/ResizeHandle";
@@ -11,16 +18,16 @@ import "react-toastify/dist/ReactToastify.css";
 
 const DB_ENDPOINT = "http://localhost:8000/";
 
-async function fetchTables() {
-  const response = await fetch(`${DB_ENDPOINT}duckduck/get-table-list/`, {
-    method: "GET",
-    headers: {
-      "Content-Type": "application/json",
-    },
-  });
-  const table_list = await response.json();
-  return table_list["table_list"]["name"];
-}
+// async function fetchTables() {
+//   const response = await fetch(`${DB_ENDPOINT}duckduck/get-table-list/`, {
+//     method: "GET",
+//     headers: {
+//       "Content-Type": "application/json",
+//     },
+//   });
+//   const table_list = await response.json();
+//   return table_list["table_list"]["name"];
+// }
 
 async function fetchData() {
   const response = await fetch(`${DB_ENDPOINT}file-manager/files-router/`, {
@@ -34,72 +41,69 @@ async function fetchData() {
 }
 
 function App() {
+  const [arrowFile, setArrowFile] = useState();
   const [fileList, setFileList] = useState([]);
   const [tableList, setTableList] = useState([]);
   const [selectedCode, setSelectedCode] = useState("");
-  const [fileFormData, setFileFormData] = useState(new FormData());
+  const [fileFormData, setFileFormData] = useState();
 
-  // fetch table list when start
+  // excute query and get result arrow file
   useEffect(() => {
-    async function fetchDataIN() {
-      await new Promise((resolve) => setTimeout(resolve, 1000));
-      const table_list = await fetchTables();
-      setTableList(table_list);
-    }
-    fetchDataIN();
-  }, []);
-
-  // update table list when selectedCode contains "create"
-  useEffect(() => {
-    if (selectedCode.toLowerCase().includes("create")) {
-      async function fetchDataIN() {
-        const table_list = await fetchTables();
-        setTableList(table_list);
-      }
-      fetchDataIN();
-    }
+    if (!selectedCode) return;
+    toast
+      .promise(excuteQuery(selectedCode, setArrowFile), {
+        pending: "Excuting ...",
+        success: "Excuted 👌",
+        error: "Failed 🤯",
+      })
+      .then(() => {
+        console.log("selectedCode", selectedCode);
+        if (selectedCode.toLowerCase().includes("create")) {
+          toast.promise(updateTableList(setTableList), {
+            pending: "Updating Table List ...",
+            success: "Table List Updated 👌",
+            error: "Failed 🤯",
+          });
+        }
+      });
   }, [selectedCode]);
 
-  // refresh file list when file uploaded
+  // init table list
   useEffect(() => {
-    async function fetchDataIN() {
-      await toast.promise(new Promise((resolve) => setTimeout(resolve, 1000)), {
-        pending: "Uploading...",
-        success: "Uploaded 👌",
-        error: "Failed 🤯",
-      });
-      const file_list = await fetchData();
-      setFileList(file_list);
-    }
-    fetchDataIN();
-  }, [fileFormData]);
+    toast.promise(updateTableList(setTableList), {
+      pending: "Updating Table List ...",
+      success: "Table List Updated 👌",
+      error: "Failed 🤯",
+    });
+  }, []);
+
+  // init file list
+  useEffect(() => {
+    toast.promise(updateFileList(setFileList), {
+      pending: "Updating File List ...",
+      success: "File List Updated 👌",
+      error: "Failed 🤯",
+    });
+  }, []);
 
   // delete file and refresh file list
   const handleDelete = async (fileId) => {
-    try {
-      const response = await fetch(
-        `${DB_ENDPOINT}file-manager/delete-file/${fileId}/`,
-        {
-          method: "DELETE",
-        },
-      );
-      async function fetchDataIN() {
-        await toast.promise(
-          new Promise((resolve) => setTimeout(resolve, 1000)),
-          {
-            pending: "Deleting...",
-            success: "Deleted 👌",
-            error: "Failed 🤯",
-          },
-        );
-        const file_list = await fetchData();
-        setFileList(file_list);
-      }
-      fetchDataIN();
-    } catch (error) {
-      console.error("Error occurred while deleting file:", error);
-    }
+    toast.promise(deleteFile(fileId, setFileList), {
+      pending: "Deleting ...",
+      success: "Deleted 👌",
+      error: "Failed 🤯",
+    });
   };
+
+  // upload file and refresh file list
+  useEffect(() => {
+    if (!fileFormData) return;
+    toast.promise(postNewFile(fileFormData, setFileList), {
+      pending: "Uploading New File ...",
+      success: "New File Uploaded 👌",
+      error: "Failed 🤯",
+    });
+  }, [fileFormData]);
 
   return (
     <>
@@ -137,22 +141,6 @@ function App() {
                     {file.file.split("/").pop()}
                   </button>
                   <div className=" mt-1 flex gap-2">
-                    <a href={file.file} target="_blank" rel="noreferrer">
-                      <svg
-                        className="h-4 w-4 text-gray-400 hover:text-gray-500"
-                        viewBox="0 0 24 24"
-                        fill="none"
-                        xmlns="http://www.w3.org/2000/svg"
-                      >
-                        <path
-                          d="M12 11V17M12 17L10 15M12 17L14 15M13 3H8.2C7.0799 3 6.51984 3 6.09202 3.21799C5.71569 3.40973 5.40973 3.71569 5.21799 4.09202C5 4.51984 5 5.0799 5 6.2V17.8C5 18.9201 5 19.4802 5.21799 19.908C5.40973 20.2843 5.71569 20.5903 6.09202 20.782C6.51984 21 7.0799 21 8.2 21H15.8C16.9201 21 17.4802 21 17.908 20.782C18.2843 20.5903 18.5903 20.2843 18.782 19.908C19 19.4802 19 18.9201 19 17.8V9M13 3L19 9M13 3V7.4C13 7.96005 13 8.24008 13.109 8.45399C13.2049 8.64215 13.3578 8.79513 13.546 8.89101C13.7599 9 14.0399 9 14.6 9H19"
-                          stroke="currentColor"
-                          strokeWidth="2"
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                        />
-                      </svg>
-                    </a>
                     <button onClick={() => handleDelete(file.id)}>
                       <svg
                         className="h-4 w-4 text-gray-300 hover:text-gray-400"
@@ -197,10 +185,7 @@ function App() {
             </ul>
           </div>
           <div className=" h-32">
-            <DropFile
-              fileFormData={fileFormData}
-              setFileFormData={setFileFormData}
-            />
+            <DropFile setFileFormData={setFileFormData} />
           </div>
         </div>
       </div>
@@ -211,7 +196,7 @@ function App() {
           </Panel>
           <ResizeHandle />
           <Panel collapsible={true} order={2}>
-            <Perspective selectedCode={selectedCode} />
+            <Perspective arrowFile={arrowFile} />
           </Panel>
         </PanelGroup>
       </div>

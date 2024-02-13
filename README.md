@@ -6,13 +6,10 @@ Frontend : React + Vite
 
 Backend : Django + DuckDB
 
-
-
-```bash
-media
-/ files     # for uploaded files, related to sqlite database
-/ tables    # for saved tables
-/ temp      # for temp query result
+Docker for Backend
 ```
-
-
+cd django
+python manage.py makemigrations
+python manage.py migrate
+docker-compose up -d
+```

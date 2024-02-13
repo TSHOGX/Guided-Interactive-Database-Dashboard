@@ -1,9 +1,7 @@
-import React, { useEffect, useCallback } from "react";
+import React, { useCallback } from "react";
 import { useDropzone } from "react-dropzone";
 
-const DB_ENDPOINT = "http://localhost:8000/";
-
-export default function DropFile({ fileFormData, setFileFormData }) {
+export default function DropFile({ setFileFormData }) {
   const onDrop = useCallback((acceptedFiles) => {
     let newFormData = new FormData();
     newFormData.append("file", acceptedFiles[0]);
@@ -12,22 +10,6 @@ export default function DropFile({ fileFormData, setFileFormData }) {
   const { getRootProps, getInputProps, isDragActive } = useDropzone({
     onDrop,
   });
-
-  // when fileFormData change, fetch (POST query) for file url
-  useEffect(() => {
-    async function fetchData() {
-      if (fileFormData.get("file")) {
-        const response = await fetch(
-          `${DB_ENDPOINT}file-manager/files-router/`,
-          {
-            method: "POST",
-            body: fileFormData,
-          },
-        );
-      }
-    }
-    fetchData();
-  }, [fileFormData]);
 
   return (
     <div
