@@ -2,9 +2,14 @@ import duckdb
 import pyarrow as pa
 import pyarrow.parquet as pq
 import numpy as np
+import os
 
 
 def save_arrow_table(arrow_table, file_path):
+    folder_path = os.path.dirname(file_path)
+    if not os.path.exists(folder_path):
+        os.makedirs(folder_path)
+
     with pa.OSFile(file_path, "wb") as f:
         writer = pa.RecordBatchFileWriter(f, arrow_table.schema)
         writer.write_table(arrow_table)
@@ -13,6 +18,10 @@ def save_arrow_table(arrow_table, file_path):
 
 
 def save_parquet_table(arrow_table, file_path):
+    folder_path = os.path.dirname(file_path)
+    if not os.path.exists(folder_path):
+        os.makedirs(folder_path)
+        
     pq.write_table(arrow_table, file_path)
     return file_path
 

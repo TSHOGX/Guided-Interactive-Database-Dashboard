@@ -1,4 +1,5 @@
-const DB_ENDPOINT = "http://localhost:8000/";
+const DB_ENDPOINT = "https://duckdb-render.onrender.com/";
+// const DB_ENDPOINT = "http://0.0.0.0:8000/";
 
 export async function postNewFile(fileFormData, setFileList) {
   if (fileFormData.get("file")) {
