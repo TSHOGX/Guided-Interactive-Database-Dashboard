@@ -1,14 +1,11 @@
-const DB_ENDPOINT = "https://duckdb-render.onrender.com/";
-// const DB_ENDPOINT = "http://0.0.0.0:8000/";
-
-export async function postNewFile(fileFormData, setFileList) {
+export async function postNewFile(fileFormData, setFileList, DB_ENDPOINT) {
   if (fileFormData.get("file")) {
     await fetch(`${DB_ENDPOINT}api/file-router/`, {
       method: "POST",
       body: fileFormData,
     })
       .then(() => {
-        updateFileList(setFileList);
+        updateFileList(setFileList, DB_ENDPOINT);
       })
       .catch((error) => {
         console.error("Error:", error);
@@ -18,7 +15,7 @@ export async function postNewFile(fileFormData, setFileList) {
   }
 }
 
-export async function excuteQuery(selectedCode, setTableArrow) {
+export async function excuteQuery(selectedCode, setTableArrow, DB_ENDPOINT) {
   await fetch(`${DB_ENDPOINT}duckduck/execute-query/`, {
     method: "POST",
     headers: {
@@ -29,7 +26,6 @@ export async function excuteQuery(selectedCode, setTableArrow) {
     }),
   })
     .then((response) => {
-      console.log("response", response);
       if (!response.ok) {
         throw new Error("Network response was not ok");
       }
@@ -39,11 +35,11 @@ export async function excuteQuery(selectedCode, setTableArrow) {
       setTableArrow(blobResponse);
     })
     .catch((error) => {
-      console.error("Error:", error);
+      throw error("Error:", error);
     });
 }
 
-export async function updateTableList(setTableList) {
+export async function updateTableList(setTableList, DB_ENDPOINT) {
   await fetch(`${DB_ENDPOINT}duckduck/get-table-list/`, {
     method: "GET",
     headers: {
@@ -60,11 +56,11 @@ export async function updateTableList(setTableList) {
       setTableList(table_list);
     })
     .catch((error) => {
-      console.error("Error:", error);
+      throw error("Error:", error);
     });
 }
 
-export async function updateFileList(setFileList) {
+export async function updateFileList(setFileList, DB_ENDPOINT) {
   await fetch(`${DB_ENDPOINT}api/file-router/`, {
     method: "GET",
     headers: {
@@ -78,17 +74,17 @@ export async function updateFileList(setFileList) {
       setFileList(file_list);
     })
     .catch((error) => {
-      console.error("Error:", error);
+      throw error("Error:", error);
     });
 }
 
 // delete file and refresh file list
-export async function deleteFile(fileId, setFileList) {
-  const response = await fetch(`${DB_ENDPOINT}api/file-router/${fileId}/`, {
+export async function deleteFile(fileId, setFileList, DB_ENDPOINT) {
+  await fetch(`${DB_ENDPOINT}api/file-router/${fileId}/`, {
     method: "DELETE",
   })
     .then(() => {
-      updateFileList(setFileList);
+      updateFileList(setFileList, DB_ENDPOINT);
     })
     .catch((error) => {
       console.error("Error:", error);

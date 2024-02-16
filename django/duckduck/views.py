@@ -28,7 +28,9 @@ def excute_query(request):
     result = duckcon.simple_query(query)
     if "file_link" in result:
         return FileResponse(open(result["file_link"], "rb"))
-    return Response(result)
+    elif "err" in result and result["err"] == "No data to save":
+        return FileResponse(open("./media/temp/error.arrow", "rb"))
+    return Response(result, status=400)
 
 
 @api_view(["GET"])

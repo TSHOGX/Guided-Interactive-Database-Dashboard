@@ -16,29 +16,7 @@ import ResizeHandle from "./components/ResizeHandle";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
-const DB_ENDPOINT = "http://localhost:8000/";
-
-// async function fetchTables() {
-//   const response = await fetch(`${DB_ENDPOINT}duckduck/get-table-list/`, {
-//     method: "GET",
-//     headers: {
-//       "Content-Type": "application/json",
-//     },
-//   });
-//   const table_list = await response.json();
-//   return table_list["table_list"]["name"];
-// }
-
-async function fetchData() {
-  const response = await fetch(`${DB_ENDPOINT}file-manager/files-router/`, {
-    method: "GET",
-    headers: {
-      "Content-Type": "application/json",
-    },
-  });
-  const file_list = await response.json();
-  return file_list;
-}
+import Switch from "@mui/material/Switch";
 
 function App() {
   const [arrowFile, setArrowFile] = useState();
@@ -46,20 +24,49 @@ function App() {
   const [tableList, setTableList] = useState([]);
   const [selectedCode, setSelectedCode] = useState("");
   const [fileFormData, setFileFormData] = useState();
+  const [isLocal, setIsLocal] = useState(true);
+  const [DB_ENDPOINT, setDB_ENDPOINT] = useState("http://localhost:8000/");
+
+  const label = { inputProps: { "aria-label": "Switch demo" } };
+
+  useEffect(() => {
+    if (isLocal) {
+      setDB_ENDPOINT("http://localhost:8000/");
+    } else {
+      setDB_ENDPOINT("https://duckdb-render.onrender.com/");
+    }
+  }, [isLocal]);
+
+  useEffect(() => {
+    toast.promise(updateTableList(setTableList, DB_ENDPOINT), {
+      pending: "Updating Table List ...",
+      success: "Table List Updated 👌",
+      error: "Failed 🤯",
+    });
+    toast.promise(updateFileList(setFileList, DB_ENDPOINT), {
+      pending: "Updating File List ...",
+      success: "File List Updated 👌",
+      error: "Failed 🤯",
+    });
+    console.log("DB_ENDPOINT", DB_ENDPOINT);
+  }, [DB_ENDPOINT]);
 
   // excute query and get result arrow file
   useEffect(() => {
     if (!selectedCode) return;
     toast
-      .promise(excuteQuery(selectedCode, setArrowFile), {
+      .promise(excuteQuery(selectedCode, setArrowFile, DB_ENDPOINT), {
         pending: "Excuting ...",
         success: "Excuted 👌",
         error: "Failed 🤯",
       })
       .then(() => {
         console.log("selectedCode", selectedCode);
-        if (selectedCode.toLowerCase().includes("create")) {
-          toast.promise(updateTableList(setTableList), {
+        if (
+          selectedCode.toLowerCase().includes("create") ||
+          selectedCode.toLowerCase().includes("drop")
+        ) {
+          toast.promise(updateTableList(setTableList, DB_ENDPOINT), {
             pending: "Updating Table List ...",
             success: "Table List Updated 👌",
             error: "Failed 🤯",
@@ -68,27 +75,9 @@ function App() {
       });
   }, [selectedCode]);
 
-  // init table list
-  useEffect(() => {
-    toast.promise(updateTableList(setTableList), {
-      pending: "Updating Table List ...",
-      success: "Table List Updated 👌",
-      error: "Failed 🤯",
-    });
-  }, []);
-
-  // init file list
-  useEffect(() => {
-    toast.promise(updateFileList(setFileList), {
-      pending: "Updating File List ...",
-      success: "File List Updated 👌",
-      error: "Failed 🤯",
-    });
-  }, []);
-
   // delete file and refresh file list
   const handleDelete = async (fileId) => {
-    toast.promise(deleteFile(fileId, setFileList), {
+    toast.promise(deleteFile(fileId, setFileList, DB_ENDPOINT), {
       pending: "Deleting ...",
       success: "Deleted 👌",
       error: "Failed 🤯",
@@ -98,7 +87,7 @@ function App() {
   // upload file and refresh file list
   useEffect(() => {
     if (!fileFormData) return;
-    toast.promise(postNewFile(fileFormData, setFileList), {
+    toast.promise(postNewFile(fileFormData, setFileList, DB_ENDPOINT), {
       pending: "Uploading New File ...",
       success: "New File Uploaded 👌",
       error: "Failed 🤯",
@@ -184,8 +173,22 @@ function App() {
               ))}
             </ul>
           </div>
-          <div className=" h-32">
-            <DropFile setFileFormData={setFileFormData} />
+          <div>
+            <div className=" flex flex-row justify-between">
+              <Switch
+                {...label}
+                defaultChecked
+                onChange={(e) => {
+                  setIsLocal(!isLocal);
+                }}
+              />
+              <div className=" my-auto">
+                Run in {isLocal ? "Local" : "Remote"}
+              </div>
+            </div>
+            <div className=" h-32">
+              <DropFile setFileFormData={setFileFormData} />
+            </div>
           </div>
         </div>
       </div>

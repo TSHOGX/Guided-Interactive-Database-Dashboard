@@ -51,12 +51,14 @@ export default function SQLEditor({ setSelectedCode }) {
   );
 }
 
-const exampleCode = `
+const exampleCode = `-- WARNING Remote Mode is slow & need time to spin up & your should delete files and tables before leaving
 
+-- Default Mode is Local Mode, you need to run your own backend and access this page again
+-- Run backend in docker: docker run -p 8000:8000 -it tshogx/duckdb-render
 
--- Write your Query here
+-- Github: https://github.com/TSHOGX/Guided-Interactive-Database-Dashboard
 
-
+-- To Excute: CTRL + Enter (Windows/Linux) / CMD + Enter (Mac OS)
 
 
 
@@ -69,6 +71,7 @@ create TABLE "my_table" (
 );
 DESCRIBE my_table;
 SHOW TABLES;
+DROP TABLE my_table;
 
 -- Local File Read
 SELECT * FROM read_csv_auto('media/files/uploaded.csv');

@@ -7,7 +7,7 @@ __pycache__/
 # Liles
 *.csv
 *.CSV
-*.arrow
+# *.arrow
 *.json
 *.JSON
 *.parquet

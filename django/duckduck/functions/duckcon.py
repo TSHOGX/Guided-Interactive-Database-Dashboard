@@ -21,7 +21,7 @@ def save_parquet_table(arrow_table, file_path):
     folder_path = os.path.dirname(file_path)
     if not os.path.exists(folder_path):
         os.makedirs(folder_path)
-        
+
     pq.write_table(arrow_table, file_path)
     return file_path
 
@@ -41,6 +41,8 @@ class Conn:
         """
         try:
             arrow_table = self.con.execute(query).arrow()
+            if arrow_table.num_rows == 0:
+                return {"err": "No data to save"}
             arrow_path = save_arrow_table(arrow_table, "media/temp/temp.arrow")
             return {"file_link": arrow_path}
         except Exception as e:
