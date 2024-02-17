@@ -1,15 +1,20 @@
-import React, { useRef } from "react";
+import { useRef } from "react";
 import AceEditor from "react-ace";
 
 import "ace-builds/src-noconflict/mode-mysql";
 import "ace-builds/src-noconflict/ext-language_tools";
 import "./sql_theme.css";
 
-export default function SQLEditor({ setSelectedCode }) {
-  const aceEditorRef = useRef();
+type SQLEditorProps = {
+  setSelectedCode: (code: string) => void;
+};
+
+export default function SQLEditor({ setSelectedCode }: SQLEditorProps) {
+  // Ref type is adjusted to match the expected type from AceEditor
+  const aceEditorRef = useRef<any>(null);
 
   const executeSelectedCode = () => {
-    const editor = aceEditorRef.current.editor;
+    const editor = aceEditorRef.current?.editor;
     if (editor) {
       const selectedText = editor.session.getTextRange(
         editor.getSelectionRange(),
@@ -19,17 +24,14 @@ export default function SQLEditor({ setSelectedCode }) {
     }
   };
 
-  // https://github.com/securingsincity/react-ace/blob/main/docs/FAQ.md
   return (
     <AceEditor
-      // theme="tomorrow"
-      className=" ace-tomorrow -mx-1"
+      className="ace-tomorrow -mx-1"
       ref={aceEditorRef}
       name="aceEditor"
       mode="mysql"
       fontSize={14}
       minLines={20}
-      // maxLines={20}
       width="100%"
       height="100%"
       highlightActiveLine
@@ -50,7 +52,6 @@ export default function SQLEditor({ setSelectedCode }) {
     />
   );
 }
-
 const exampleCode = `-- WARNING Remote Mode is slow & need time to spin up & your should delete files and tables before leaving
 
 -- Default Mode is Local Mode, you need to run your own backend and access this page again

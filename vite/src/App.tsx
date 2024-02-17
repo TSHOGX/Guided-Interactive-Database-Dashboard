@@ -8,6 +8,7 @@ import {
   updateFileList,
   postNewFile,
 } from "./lib/api";
+import { FileType } from "./lib/types";
 
 import { Panel, PanelGroup } from "react-resizable-panels";
 import ResizeHandle from "./components/ResizeHandle";
@@ -16,13 +17,15 @@ import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
 function App() {
-  const [arrowFile, setArrowFile] = useState();
-  const [fileList, setFileList] = useState([]);
-  const [tableList, setTableList] = useState([]);
-  const [selectedCode, setSelectedCode] = useState("");
-  const [fileFormData, setFileFormData] = useState();
-  const [isLocal, setIsLocal] = useState(true);
-  const [DB_ENDPOINT, setDB_ENDPOINT] = useState("http://localhost:8000/");
+  const [arrowFile, setArrowFile] = useState<Blob | null>(null);
+  const [fileList, setFileList] = useState<FileType[]>([]);
+  const [tableList, setTableList] = useState<string[]>([]);
+  const [selectedCode, setSelectedCode] = useState<string>("");
+  const [fileFormData, setFileFormData] = useState<FormData | null>(null);
+  const [isLocal, setIsLocal] = useState<boolean>(true);
+  const [DB_ENDPOINT, setDB_ENDPOINT] = useState<string>(
+    "http://localhost:8000/",
+  );
 
   // update DB_ENDPOINT when isLocal changes
   useEffect(() => {
@@ -95,7 +98,7 @@ function App() {
         draggable
         pauseOnHover
         theme="colored"
-        transition:Bounce
+        // transition:Bounce
       />
       <div className=" hidden lg:fixed lg:inset-y-0 lg:z-50 lg:flex lg:w-64 lg:flex-col">
         <Sider
@@ -115,7 +118,7 @@ function App() {
           </Panel>
           <ResizeHandle />
           <Panel collapsible={true} order={2}>
-            <Perspective arrowFile={arrowFile} />
+            <Perspective arrowFile={arrowFile as Blob | null} />
           </Panel>
         </PanelGroup>
       </div>

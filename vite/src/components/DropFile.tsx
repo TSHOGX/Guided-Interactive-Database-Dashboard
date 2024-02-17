@@ -1,13 +1,21 @@
-import React, { useCallback } from "react";
+import { useCallback } from "react";
 import { useDropzone } from "react-dropzone";
 
-export default function DropFile({ setFileFormData }) {
-  const onDrop = useCallback((acceptedFiles) => {
-    let newFormData = new FormData();
-    newFormData.append("file", acceptedFiles[0]);
-    setFileFormData(newFormData);
-  }, []);
-  const { getRootProps, getInputProps, isDragActive } = useDropzone({
+type DropFileProps = {
+  setFileFormData: (formData: FormData) => void;
+};
+
+export default function DropFile({ setFileFormData }: DropFileProps) {
+  const onDrop = useCallback(
+    (acceptedFiles: File[]) => {
+      let newFormData = new FormData();
+      newFormData.append("file", acceptedFiles[0]);
+      setFileFormData(newFormData);
+    },
+    [setFileFormData],
+  );
+
+  const { getRootProps, getInputProps } = useDropzone({
     onDrop,
   });
 

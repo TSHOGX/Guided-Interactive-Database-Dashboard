@@ -1,4 +1,16 @@
-export async function postNewFile(fileFormData, setFileList, DB_ENDPOINT) {
+// Define types for your custom objects if needed
+type FileFormData = any; // Replace 'any' with a more specific type if known
+type SetFileListFunction = (fileList: any) => void; // Replace 'any' with the type of the file list
+type SetTableArrowFunction = (blobResponse: Blob) => void;
+type SetTableListFunction = (tableList: any[]) => void; // Replace 'any' with the type of table list
+type SelectedCodeType = string; // Replace 'string' if a more specific type is required
+type DBEndpointType = string;
+
+export async function postNewFile(
+  fileFormData: FileFormData,
+  setFileList: SetFileListFunction,
+  DB_ENDPOINT: DBEndpointType,
+): Promise<void> {
   if (fileFormData.get("file")) {
     await fetch(`${DB_ENDPOINT}api/file-router/`, {
       method: "POST",
@@ -15,7 +27,11 @@ export async function postNewFile(fileFormData, setFileList, DB_ENDPOINT) {
   }
 }
 
-export async function excuteQuery(selectedCode, setTableArrow, DB_ENDPOINT) {
+export async function excuteQuery(
+  selectedCode: SelectedCodeType,
+  setTableArrow: SetTableArrowFunction,
+  DB_ENDPOINT: DBEndpointType,
+): Promise<void> {
   await fetch(`${DB_ENDPOINT}duckduck/execute-query/`, {
     method: "POST",
     headers: {
@@ -39,7 +55,10 @@ export async function excuteQuery(selectedCode, setTableArrow, DB_ENDPOINT) {
     });
 }
 
-export async function updateTableList(setTableList, DB_ENDPOINT) {
+export async function updateTableList(
+  setTableList: SetTableListFunction,
+  DB_ENDPOINT: DBEndpointType,
+): Promise<void> {
   await fetch(`${DB_ENDPOINT}duckduck/get-table-list/`, {
     method: "GET",
     headers: {
@@ -60,7 +79,10 @@ export async function updateTableList(setTableList, DB_ENDPOINT) {
     });
 }
 
-export async function updateFileList(setFileList, DB_ENDPOINT) {
+export async function updateFileList(
+  setFileList: SetFileListFunction,
+  DB_ENDPOINT: DBEndpointType,
+): Promise<void> {
   await fetch(`${DB_ENDPOINT}api/file-router/`, {
     method: "GET",
     headers: {
@@ -79,7 +101,11 @@ export async function updateFileList(setFileList, DB_ENDPOINT) {
 }
 
 // delete file and refresh file list
-export async function deleteFile(fileId, setFileList, DB_ENDPOINT) {
+export async function deleteFile(
+  fileId: string, // Assuming fileId is a string
+  setFileList: SetFileListFunction,
+  DB_ENDPOINT: DBEndpointType,
+): Promise<void> {
   await fetch(`${DB_ENDPOINT}api/file-router/${fileId}/`, {
     method: "DELETE",
   })

@@ -3,6 +3,16 @@ import Switch from "@mui/material/Switch";
 import { deleteFile } from "../lib/api";
 import DropFile from "./DropFile";
 
+type SiderProps = {
+  fileList: { id: string; file: string }[];
+  tableList: string[];
+  setFileList: (fileList: { id: string; file: string }[]) => void;
+  setFileFormData: (formData: FormData) => void;
+  isLocal: boolean;
+  setIsLocal: (isLocal: boolean) => void;
+  DB_ENDPOINT: string;
+};
+
 export default function Sider({
   fileList,
   tableList,
@@ -11,11 +21,11 @@ export default function Sider({
   isLocal,
   setIsLocal,
   DB_ENDPOINT,
-}) {
+}: SiderProps) {
   const label = { inputProps: { "aria-label": "Switch demo" } };
 
   // delete file and refresh file list
-  const handleDelete = async (fileId) => {
+  const handleDelete = async (fileId: string) => {
     toast.promise(deleteFile(fileId, setFileList, DB_ENDPOINT), {
       pending: "Deleting ...",
       success: "Deleted 👌",
@@ -36,8 +46,9 @@ export default function Sider({
             >
               <button
                 onClick={(e) => {
+                  const target = e.target as HTMLButtonElement;
                   navigator.clipboard.writeText(
-                    `media/files/${e.target.textContent}`,
+                    `media/files/${target.textContent}`,
                   );
                 }}
               >
@@ -76,8 +87,9 @@ export default function Sider({
             >
               <button
                 onClick={(e) => {
+                  const target = e.target as HTMLButtonElement;
                   navigator.clipboard.writeText(
-                    `SELECT * FROM ${e.target.textContent};`,
+                    `SELECT * FROM ${target.textContent};`,
                   );
                 }}
               >
@@ -92,7 +104,7 @@ export default function Sider({
           <Switch
             {...label}
             defaultChecked
-            onChange={(e) => {
+            onChange={() => {
               setIsLocal(!isLocal);
             }}
           />
