@@ -10,8 +10,7 @@ import {
 } from "./lib/api";
 import { FileType } from "./lib/types";
 
-import { Panel, PanelGroup } from "react-resizable-panels";
-import ResizeHandle from "./components/ResizeHandle";
+import { Panel, PanelGroup, PanelResizeHandle } from "react-resizable-panels";
 
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
@@ -100,25 +99,34 @@ function App() {
         theme="colored"
         // transition:Bounce
       />
-      <div className=" hidden lg:fixed lg:inset-y-0 lg:z-50 lg:flex lg:w-64 lg:flex-col">
-        <Sider
-          fileList={fileList}
-          tableList={tableList}
-          setFileList={setFileList}
-          setFileFormData={setFileFormData}
-          isLocal={isLocal}
-          setIsLocal={setIsLocal}
-          DB_ENDPOINT={DB_ENDPOINT}
-        />
-      </div>
-      <div className=" h-screen lg:pl-64">
-        <PanelGroup autoSaveId="example" direction="vertical">
-          <Panel collapsible={true} defaultSize={20} order={1}>
-            <SQLEditor setSelectedCode={setSelectedCode} />
+      <div className=" h-screen w-screen">
+        <PanelGroup direction="horizontal">
+          <Panel defaultSize={20} minSize={5}>
+            <Sider
+              fileList={fileList}
+              tableList={tableList}
+              setFileList={setFileList}
+              setFileFormData={setFileFormData}
+              isLocal={isLocal}
+              setIsLocal={setIsLocal}
+              DB_ENDPOINT={DB_ENDPOINT}
+            />
           </Panel>
-          <ResizeHandle />
-          <Panel collapsible={true} order={2}>
-            <Perspective arrowFile={arrowFile as Blob | null} />
+          <PanelResizeHandle />
+          <Panel>
+            <PanelGroup direction="vertical">
+              <Panel defaultSize={55} minSize={5}>
+                <SQLEditor setSelectedCode={setSelectedCode} />
+              </Panel>
+              <PanelResizeHandle />
+              <Panel defaultSize={45} minSize={5}>
+                <Perspective arrowFile={arrowFile as Blob | null} />
+              </Panel>
+            </PanelGroup>
+          </Panel>
+          <PanelResizeHandle />
+          <Panel defaultSize={25} minSize={5}>
+            <div>widges, llm </div>
           </Panel>
         </PanelGroup>
       </div>

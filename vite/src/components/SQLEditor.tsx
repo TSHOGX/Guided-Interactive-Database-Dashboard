@@ -52,14 +52,22 @@ export default function SQLEditor({ setSelectedCode }: SQLEditorProps) {
     />
   );
 }
-const exampleCode = `-- WARNING Remote Mode is slow & need time to spin up & your should delete files and tables before leaving
 
--- Default Mode is Local Mode, you need to run your own backend and access this page again
--- Run backend in docker: docker run -p 8000:8000 -it tshogx/duckdb-render
+const exampleCode = `/*
+________________________________________________________________________________
+                        __  ____/___  _/__  __ \\__  __ \\
+                        _  / __  __  / __  / / /_  / / /
+                        / /_/ / __/ /  _  /_/ /_  /_/ / 
+________________________\\____/  /___/  /_____/ /_____/__________________________
+                                                                    
+WARNING Remote Mode is slow & need time to spin up & your should delete files and tables before leaving
 
--- Github: https://github.com/TSHOGX/Guided-Interactive-Database-Dashboard
+Default Mode is Local Mode, you need to run your own backend and access this page again. To run in docker: 
+- docker run -p 8000:8000 -it tshogx/duckdb-render
 
--- To Excute: CTRL + Enter (Windows/Linux) / CMD + Enter (Mac OS)
+To Excute: CTRL + Enter (Windows/Linux) / CMD + Enter (Mac OS)
+
+*/
 
 
 

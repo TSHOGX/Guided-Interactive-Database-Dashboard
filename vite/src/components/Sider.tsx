@@ -3,6 +3,8 @@ import Switch from "@mui/material/Switch";
 import { deleteFile } from "../lib/api";
 import DropFile from "./DropFile";
 
+import { FaGithub } from "react-icons/fa";
+
 type SiderProps = {
   fileList: { id: string; file: string }[];
   tableList: string[];
@@ -34,7 +36,7 @@ export default function Sider({
   };
 
   return (
-    <div className=" flex grow flex-col justify-between overflow-y-auto border-r border-gray-200 bg-white px-6 pb-4">
+    <div className=" flex h-screen grow flex-col justify-between overflow-y-auto border-r border-gray-200 bg-white px-6 pb-4">
       <div className=" flex w-full flex-col">
         <div className=" mx-auto pb-4 pt-8 text-lg">File List</div>
         {/* <hr className=" mx-auto my-4 h-1 w-48 rounded bg-gray-200" /> */}
@@ -100,18 +102,26 @@ export default function Sider({
         </ul>
       </div>
       <div>
-        <div className=" flex flex-row justify-between">
-          <Switch
-            {...label}
-            defaultChecked
-            onChange={() => {
-              setIsLocal(!isLocal);
-            }}
-          />
-          <div className=" my-auto">Run in {isLocal ? "Local" : "Remote"}</div>
-        </div>
-        <div className=" h-32">
+        <div className="flex items-center justify-between space-x-4">
+          <div className=" flex flex-row justify-between">
+            <div className=" my-auto">
+              Run In {isLocal ? "Local" : "Remote"}
+            </div>
+            <Switch
+              {...label}
+              defaultChecked
+              onChange={() => {
+                setIsLocal(!isLocal);
+              }}
+            />
+          </div>
           <DropFile setFileFormData={setFileFormData} />
+          <a
+            href="https://github.com/TSHOGX/Guided-Interactive-Database-Dashboard"
+            target="_blank"
+          >
+            <FaGithub />
+          </a>
         </div>
       </div>
     </div>

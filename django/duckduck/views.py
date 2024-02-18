@@ -25,6 +25,9 @@ def excute_query(request):
     {"err": "..."} / FileResponse
     """
     query = request.data.get("query")
+    if query.startswith("-- llm "):
+        # result = duckcon.select_query(query)
+        pass
     result = duckcon.simple_query(query)
     if "file_link" in result:
         return FileResponse(open(result["file_link"], "rb"))

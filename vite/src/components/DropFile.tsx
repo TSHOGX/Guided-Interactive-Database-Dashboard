@@ -1,5 +1,6 @@
 import { useCallback } from "react";
 import { useDropzone } from "react-dropzone";
+import { FaFileArrowUp } from "react-icons/fa6";
 
 type DropFileProps = {
   setFileFormData: (formData: FormData) => void;
@@ -20,26 +21,9 @@ export default function DropFile({ setFileFormData }: DropFileProps) {
   });
 
   return (
-    <div
-      className="flex h-full w-full items-center justify-center rounded-md border border-dotted px-4 text-gray-500"
-      {...getRootProps()}
-    >
+    <div className=" hover:cursor-pointer" {...getRootProps()}>
       <input {...getInputProps()} />
-      <svg
-        className="mr-2 h-6 w-6"
-        fill="none"
-        stroke="currentColor"
-        viewBox="0 0 24 24"
-        xmlns="http://www.w3.org/2000/svg"
-      >
-        <path
-          strokeLinecap="round"
-          strokeLinejoin="round"
-          strokeWidth="2"
-          d="M12 6v6m0 0v6m0-6h6m-6 0H6"
-        ></path>
-      </svg>
-      Drop the files here
+      <FaFileArrowUp />
     </div>
   );
 }
