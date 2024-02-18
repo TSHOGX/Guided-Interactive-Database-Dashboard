@@ -21,7 +21,7 @@ export default function DropFile({ setFileFormData }: DropFileProps) {
   });
 
   return (
-    <div className=" hover:cursor-pointer" {...getRootProps()}>
+    <div className=" text-gray-500 hover:cursor-pointer" {...getRootProps()}>
       <input {...getInputProps()} />
       <FaFileArrowUp />
     </div>

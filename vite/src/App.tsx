@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import Perspective from "./components/Perspective";
 import SQLEditor from "./components/SQLEditor";
 import Sider from "./components/Sider";
+import SideSelector from "./components/SideSelector";
 import {
   excuteQuery,
   updateTableList,
@@ -9,6 +10,8 @@ import {
   postNewFile,
 } from "./lib/api";
 import { FileType } from "./lib/types";
+
+import { RiDragMove2Line } from "react-icons/ri";
 
 import { Panel, PanelGroup, PanelResizeHandle } from "react-resizable-panels";
 
@@ -99,37 +102,36 @@ function App() {
         theme="colored"
         // transition:Bounce
       />
-      <div className=" h-screen w-screen">
-        <PanelGroup direction="horizontal">
-          <Panel defaultSize={20} minSize={5}>
-            <Sider
-              fileList={fileList}
-              tableList={tableList}
-              setFileList={setFileList}
-              setFileFormData={setFileFormData}
-              isLocal={isLocal}
-              setIsLocal={setIsLocal}
-              DB_ENDPOINT={DB_ENDPOINT}
-            />
-          </Panel>
-          <PanelResizeHandle />
-          <Panel>
-            <PanelGroup direction="vertical">
-              <Panel defaultSize={55} minSize={5}>
-                <SQLEditor setSelectedCode={setSelectedCode} />
-              </Panel>
-              <PanelResizeHandle />
-              <Panel defaultSize={45} minSize={5}>
-                <Perspective arrowFile={arrowFile as Blob | null} />
-              </Panel>
-            </PanelGroup>
-          </Panel>
-          <PanelResizeHandle />
-          <Panel defaultSize={25} minSize={5}>
-            <div>widges, llm </div>
-          </Panel>
-        </PanelGroup>
-      </div>
+      <PanelGroup direction="horizontal">
+        <SideSelector />
+        <Panel defaultSize={20} minSize={5}>
+          <Sider
+            fileList={fileList}
+            tableList={tableList}
+            setFileList={setFileList}
+            setFileFormData={setFileFormData}
+            isLocal={isLocal}
+            setIsLocal={setIsLocal}
+            DB_ENDPOINT={DB_ENDPOINT}
+          />
+        </Panel>
+        <PanelResizeHandle className=" border-x text-sm">
+          <RiDragMove2Line className=" h-full items-center justify-center text-gray-500" />
+        </PanelResizeHandle>
+        <Panel>
+          <PanelGroup direction="vertical">
+            <Panel defaultSize={55} minSize={5}>
+              <SQLEditor setSelectedCode={setSelectedCode} />
+            </Panel>
+            <PanelResizeHandle className=" border-y text-sm">
+              <RiDragMove2Line className=" w-full items-center justify-center text-gray-500" />
+            </PanelResizeHandle>
+            <Panel defaultSize={45} minSize={5}>
+              <Perspective arrowFile={arrowFile as Blob | null} />
+            </Panel>
+          </PanelGroup>
+        </Panel>
+      </PanelGroup>
     </>
   );
 }
