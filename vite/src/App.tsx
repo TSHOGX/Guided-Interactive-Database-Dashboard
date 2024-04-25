@@ -20,6 +20,7 @@ import "react-toastify/dist/ReactToastify.css";
 
 function App() {
   const [arrowFile, setArrowFile] = useState<Blob | null>(null);
+  const [llmResult, setLlmResult] = useState<Blob | null>(null);
   const [fileList, setFileList] = useState<FileType[]>([]);
   const [tableList, setTableList] = useState<string[]>([]);
   const [selectedCode, setSelectedCode] = useState<string>("");
@@ -57,11 +58,14 @@ function App() {
   useEffect(() => {
     if (!selectedCode) return;
     toast
-      .promise(excuteQuery(selectedCode, setArrowFile, DB_ENDPOINT), {
-        pending: "Excuting ...",
-        success: "Excuted 👌",
-        error: "Failed 🤯",
-      })
+      .promise(
+        excuteQuery(selectedCode, setArrowFile, setLlmResult, DB_ENDPOINT),
+        {
+          pending: "Excuting ...",
+          success: "Excuted 👌",
+          error: "Failed 🤯",
+        },
+      )
       .then(() => {
         console.log("selectedCode", selectedCode);
         if (
@@ -108,6 +112,7 @@ function App() {
           <Sider
             fileList={fileList}
             tableList={tableList}
+            llmResult={llmResult}
             setFileList={setFileList}
             setFileFormData={setFileFormData}
             isLocal={isLocal}

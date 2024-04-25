@@ -70,6 +70,19 @@ To Excute: CTRL + Enter (Windows/Linux) / CMD + Enter (Mac OS)
 */
 
 
+-- LLM Demo
+
+-- 1. upload description file for RAG 
+CREATE TABLE ohbrfss22 AS SELECT * FROM 'media/files/ohbrfss22.csv';
+SELECT * FROM ohbrfss22;
+
+-- 2. ask question and llm will pick related labels (sql, visualization type, ...)
+-- llm: how does income related to health?
+
+-- 3. visualize according to its suggestions
+SELECT INCOME3, GENHLTH FROM "ohbrfss22";
+
+
 
 -- Example Queries
 

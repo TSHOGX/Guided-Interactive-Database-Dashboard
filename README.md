@@ -6,7 +6,20 @@ Frontend : React + Vite
 
 Backend : Django + DuckDB
 
-Docker for Backend
+
+Run in Local
+```
+cd django
+pip install -r requirements.txt
+python manage.py runserver 0.0.0.0:8000
+
+cd vite
+yarn
+yarn dev
+```
+
+
+Set Docker for Backend
 ```
 cd django
 python manage.py makemigrations
